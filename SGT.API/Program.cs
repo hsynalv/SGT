@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SGT.Application;
 using SGT.Domain.Entities.Identity;
+using SGT.Persistence;
 using SGT.Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,12 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<SGT_APIDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddIdentity<AppUser, IdentityRole>()
-    .AddEntityFrameworkStores<SGT_APIDbContext>()
-    .AddDefaultTokenProviders();
+// Custom Service Registration
+builder.Services.AddPersistenceServices();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
