@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using SGT.Application.Abstraction.Token;
+using SGT.Application.DTOs;
 using SGT.Application.Exceptions;
 
 namespace SGT.Application.Features.Commands.AppUser.LoginUser;
@@ -8,11 +10,13 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, 
 {
     private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
     private readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
+    readonly ITokenHandler _tokenHandler;
 
-    public LoginUserCommandHandler(SignInManager<Domain.Entities.Identity.AppUser> signInManager, UserManager<Domain.Entities.Identity.AppUser> userManager)
+    public LoginUserCommandHandler(SignInManager<Domain.Entities.Identity.AppUser> signInManager, UserManager<Domain.Entities.Identity.AppUser> userManager, ITokenHandler tokenHandler)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _tokenHandler = tokenHandler;
     }
 
 
@@ -26,9 +30,22 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, 
            throw new UserNotFoundException();
 
        SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+       if (result.Succeeded) //Authentication başarılı!
+       {
+           //.... Yetkileri belirlememiz gerekiyor!
+           Token token = _tokenHandler.CreateAccessToken(5);
+           return new LoginUserSuccessCommandResponse()
+           {
+               Token = token
+           };
+       }
 
 
-       return new();
+       //return new LoginUserErrorCommandResponse()
+       //{
+       //    Message = "Kullanıcı adı veya şifre hatalı..."
+       //};
+       throw new AuthenticationErrorException();
 
     }
 }

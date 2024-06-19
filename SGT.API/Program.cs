@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SGT.Application;
-using SGT.Domain.Entities.Identity;
 using SGT.Persistence;
 using SGT.Persistence.Context;
+using System.Text;
+using SGT.Infrasturcture;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,27 @@ builder.Services.AddSwaggerGen();
 // Custom Service Registration
 builder.Services.AddPersistenceServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
+
+
+
+// Token doğrulama
+
+builder.Services.AddAuthentication("Admin")
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true, //Oluşturulacak token değerini kimlerin/hangi originlerin/sitelerin kullanıyı belirlediğimiz değerdir. 
+            ValidateIssuer = true, //Oluşturulacak token değerini kimin dağıttığını ifade edeceğimiz alandır. 
+            ValidateLifetime = true, //Oluşturulan token değerinin süresini kontrol edecek olan doğrulamadır.
+            ValidateIssuerSigningKey = true, //Üretilecek token değerinin uygulamamıza ait bir değer olduğunu ifade eden security key verisinin doğrulanmasıdır.
+            ValidAudience = builder.Configuration["Token:Audience"],
+            ValidIssuer = builder.Configuration["Token:Issuer"],
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"]))
+        };
+    });
 
 var app = builder.Build();
 
@@ -30,7 +52,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-// app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
@@ -39,7 +61,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
-    // Bloglar i�in slug tabanl� routing
+    // Bloglar için slug tabanlı routing
     endpoints.MapControllerRoute(
         name: "blog",
         pattern: "blog/{slug}",
