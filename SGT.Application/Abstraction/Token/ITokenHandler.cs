@@ -8,6 +8,6 @@ namespace SGT.Application.Abstraction.Token
 {
     public interface ITokenHandler
     {
-        DTOs.Token CreateAccessToken(int minute);
+        DTOs.Token CreateAccessToken(int second);
     }
 }

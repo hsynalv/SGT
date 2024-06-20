@@ -1,40 +1,37 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using SGT.Application.Abstraction.Services;
+using SGT.Application.DTOs.User;
 using SGT.Application.Exceptions;
 
 namespace SGT.Application.Features.Commands.AppUser.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+        readonly IUserService _userService;
 
-        public CreateUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager)
+        public CreateUserCommandHandler(IUserService userService)
         {
-            _userManager = userManager;
+            _userService = userService;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            IdentityResult result = await _userManager.CreateAsync(new()
+
+            CreateUserResponseDto response =  await _userService.CreateAsync(new()
             {
-                Id = Guid.NewGuid().ToString(),
-                UserName = request.UserName,
                 Email = request.Email,
                 NameSurname = request.NameSurname,
-                Bio = "", // TODO: Bio ve Profile Picture nul olma hatasını çöz
-                ProfilePicture = "",
-            }, request.Password);
-
-            if (result.Succeeded)
+                Password = request.Password,
+                PasswrodConfirm = request.PasswrodConfirm,
+                UserName = request.UserName
+            });
+            
+            return new()
             {
-                return new()
-                {
-                    Succeeded = true,
-                    Message = "Kullanıcı başarıyla oluşturuldu..."
-                };
-            }
-
-            throw new UserCreateFailedException();
+                Message = response.Message,
+                Succeeded = response.Succeeded
+            };
         }
     }
 }

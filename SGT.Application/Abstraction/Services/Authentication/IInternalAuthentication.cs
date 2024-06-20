@@ -1,0 +1,6 @@
+﻿namespace SGT.Application.Abstraction.Services.Authentication;
+
+public interface IInternalAuthentication
+{
+    Task<DTOs.Token> LoginAsync(string usernameOrEmail, string password, int accessTokenLifeTime);
+}

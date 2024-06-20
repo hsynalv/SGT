@@ -6,8 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SGT.Application.Abstraction.Services;
+using SGT.Application.Abstraction.Services.Authentication;
 using SGT.Domain.Entities.Identity;
 using SGT.Persistence.Context;
+using SGT.Persistence.Services;
 
 namespace SGT.Persistence
 {
@@ -28,6 +31,13 @@ namespace SGT.Persistence
                     options.Password.RequireUppercase = false;
                 }).AddEntityFrameworkStores<SGT_APIDbContext>()
                 .AddDefaultTokenProviders();
+
+
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IExternalAuthentication, AuthService>();
+            services.AddScoped<IInternalAuthentication, AuthService>();
         }
     }
 }
