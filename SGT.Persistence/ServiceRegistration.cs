@@ -22,6 +22,7 @@ namespace SGT.Persistence
             services.AddDbContext<SGT_APIDbContext>(options =>
                 options.UseSqlServer(Configuration.ConnectionString));
 
+
             services.AddIdentity<AppUser, AppRole>(options =>
                 {
                     options.Password.RequiredLength = 3;

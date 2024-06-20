@@ -14,7 +14,7 @@ namespace SGT.Domain.Entities.Identity
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenEndDate { get; set; }
 
-        public string ProfilePicture { get; set; }
-        public string Bio { get; set; }
+        public string? ProfilePicture { get; set; }
+        public string? Bio { get; set; }
     }
 }

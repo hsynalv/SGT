@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SGT.Application.Abstraction.Services;
 using SGT.Application.DTOs.User;
+using SGT.Application.Exceptions;
 using SGT.Domain.Entities.Identity;
 
 namespace SGT.Persistence.Services
 {
     public class UserService : IUserService
     {
-        readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
+        readonly UserManager<AppUser> _userManager;
         public UserService(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
@@ -25,8 +26,6 @@ namespace SGT.Persistence.Services
                 UserName = model.UserName,
                 Email = model.Email,
                 NameSurname = model.NameSurname,
-                Bio = "", // TODO: Bio null olma olayını çöz
-                ProfilePicture = "" // TODO: ProfilePicture null olma olayını çöz
             }, model.Password);
 
             CreateUserResponseDto response = new() { Succeeded = result.Succeeded };
@@ -38,6 +37,15 @@ namespace SGT.Persistence.Services
                     response.Message += $"{error.Code} - {error.Description}\n";
 
             return response;
+        }
+
+        public async Task UpdateRefreshToken(string refreshToken, AppUser user, DateTime accessTokenDate,
+            int addOnAccessTokenDate)
+        {
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenEndDate = accessTokenDate.AddSeconds(addOnAccessTokenDate);
+            IdentityResult result = await _userManager.UpdateAsync(user);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SGT.Application.Features.Commands.AppUser.GoogleLogin;
 using SGT.Application.Features.Commands.AppUser.LoginUser;
+using SGT.Application.Features.Commands.AppUser.RefreshTokenLogin;
 
 namespace SGT.API.Controllers
 {
@@ -21,6 +22,13 @@ namespace SGT.API.Controllers
         public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
         {
             LoginUserCommandResponse response = await _mediator.Send(loginUserCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenLoginCommandRequest refreshTokenLoginCommandRequest)
+        {
+            RefreshTokenLoginCommandResponse response = await _mediator.Send(refreshTokenLoginCommandRequest);
             return Ok(response);
         }
 
