@@ -26,7 +26,7 @@ namespace SGT.Persistence.Services
                 Email = model.Email,
                 NameSurname = model.NameSurname,
                 Bio = "", // TODO: Bio null olma olayını çöz
-                ProfilePicture = "" // TODO ProfilePicture null olma olayını çöz
+                ProfilePicture = "" // TODO: ProfilePicture null olma olayını çöz
             }, model.Password);
 
             CreateUserResponseDto response = new() { Succeeded = result.Succeeded };
