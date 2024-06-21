@@ -18,6 +18,9 @@ namespace SGT.Infrasturcture.Services
 
         public async Task SendMessageAsync(string[] toes, string subject, string body, bool isBodyHtml = true)
         {
+
+            //TODO: smtp tarafını düzelt.
+
             MailMessage mail = new();
             mail.IsBodyHtml= isBodyHtml;
             foreach (var to in toes)
