@@ -38,5 +38,7 @@ namespace SGT.API.Controllers
             GoogleLoginCommandResponse response = await _mediator.Send(googleLoginCommandRequest);
             return Ok(response);
         }
+
+
     }
 }

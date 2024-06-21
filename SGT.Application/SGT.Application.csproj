@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Commands\AppRole\" />
     <Folder Include="Features\Queries\" />
   </ItemGroup>
 
