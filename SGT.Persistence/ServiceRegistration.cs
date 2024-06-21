@@ -31,6 +31,10 @@ namespace SGT.Persistence
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
+
+                    options.User.RequireUniqueEmail = true;
+                    options.User.AllowedUserNameCharacters = "abcçdefgðhiýjklmnoöpqrsþtuüvwxyzABCÇDEFGHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-._";
+
                 }).AddUserValidator<CustomUserValidator>()
                 .AddPasswordValidator<CustomPasswordValidator>()
                 .AddEntityFrameworkStores<SGT_APIDbContext>()
