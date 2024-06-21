@@ -31,7 +31,8 @@ namespace SGT.Persistence
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
-                }).AddPasswordValidator<CustomPasswordValidator>()
+                }).AddUserValidator<CustomUserValidator>()
+                .AddPasswordValidator<CustomPasswordValidator>()
                 .AddEntityFrameworkStores<SGT_APIDbContext>()
                 .AddDefaultTokenProviders();
 
