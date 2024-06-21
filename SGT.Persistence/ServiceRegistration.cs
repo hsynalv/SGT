@@ -10,6 +10,7 @@ using SGT.Application.Abstraction.Services;
 using SGT.Application.Abstraction.Services.Authentication;
 using SGT.Domain.Entities.Identity;
 using SGT.Persistence.Context;
+using SGT.Persistence.CustomValidation;
 using SGT.Persistence.Services;
 
 namespace SGT.Persistence
@@ -30,7 +31,8 @@ namespace SGT.Persistence
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
-                }).AddEntityFrameworkStores<SGT_APIDbContext>()
+                }).AddPasswordValidator<CustomPasswordValidator>()
+                .AddEntityFrameworkStores<SGT_APIDbContext>()
                 .AddDefaultTokenProviders();
 
 

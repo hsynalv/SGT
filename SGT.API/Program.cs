@@ -8,6 +8,7 @@ using SGT.Persistence.Context;
 using System.Text;
 using Serilog.Core;
 using Serilog.Sinks.PostgreSQL;
+using SGT.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,12 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+// Global Exception Handler
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>());
+
+
 
 app.UseEndpoints(endpoints =>
 {
