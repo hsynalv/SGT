@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using SGT.Application;
+using SGT.Infrasturcture;
 using SGT.Persistence;
 using SGT.Persistence.Context;
 using System.Text;
-using SGT.Infrasturcture;
+using Serilog.Core;
+using Serilog.Sinks.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPersistenceServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
+
+// Loglama
+
+//Logger Log = new LoggerConfiguration()
+//    .WriteTo.Console()
+//    .WriteTo.File("logs/log.txt")
+//    .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("PostgreSQL"), "logs", needAutoCreateTable:true,
+//        columnOptions: new Dictionary<string, ColumnWriterBase>
+//        {
+
+//        })
+//    .CreateLogger();
+
+//builder.Host.UseSerilog();
 
 
 

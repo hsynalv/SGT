@@ -19,6 +19,7 @@ static class Configuration
             }
 
             return configurationManager.GetConnectionString("DefaultConnection");
+            //return configurationManager.GetConnectionString("PostgreSql");
         }
     }
 }
