@@ -11,6 +11,7 @@ namespace SGT.Application.Abstraction.Services
     public interface IUserService
     {
         Task<CreateUserResponseDto> CreateAsync(CreateUserDto model);
-        Task UpdateRefreshToken(string refreshToken, AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate);
+        Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenDate, int addOnAccessTokenDate);
+        Task UpdatePasswordAsync(string userId, string resetToken, string newPassword);
     }
 }

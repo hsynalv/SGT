@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using SGT.Application.Abstraction.Services;
 using SGT.Application.DTOs.User;
 using SGT.Application.Exceptions;
+using SGT.Application.Helpers;
 using SGT.Domain.Entities.Identity;
 
 namespace SGT.Persistence.Services
@@ -39,7 +40,22 @@ namespace SGT.Persistence.Services
             return response;
         }
 
-        public async Task UpdateRefreshToken(string refreshToken, AppUser user, DateTime accessTokenDate,
+
+        public async Task UpdatePasswordAsync(string userId, string resetToken, string newPassword)
+        {
+            AppUser user = await _userManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                resetToken = resetToken.UrlDecode();
+                IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+                if (result.Succeeded)
+                    await _userManager.UpdateSecurityStampAsync(user);
+                else
+                    throw new PasswordChangeFailedException();
+            }
+        }
+
+        public async Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenDate,
             int addOnAccessTokenDate)
         {
 
